@@ -53,4 +53,14 @@ static async create(req: Request, res: Response, next: NextFunction) {
             next(e);
         }
     }
+    static async getAll(req: Request, res: Response, next: NextFunction) {
+        try {
+            const response = await CustomerService.getAll();
+            res.status(200).json({
+                data: response
+            });
+        } catch (e) {
+            next(e);
+        }
+    }
 }

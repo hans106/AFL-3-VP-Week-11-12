@@ -66,4 +66,13 @@ export class RestaurantService {
 
         return toRestaurantResponse(restaurant);
     }
+
+    static async getAll() {
+        const restaurants = await prismaClient.restaurant.findMany({
+            orderBy: {
+                id: 'asc' // Urutkan dari ID terkecil
+            }
+        });
+        return restaurants;
+    }
 }

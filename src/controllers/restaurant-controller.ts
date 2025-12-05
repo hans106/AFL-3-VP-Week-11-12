@@ -30,7 +30,7 @@ export class RestaurantController {
 
     static async update(req: Request, res: Response, next: NextFunction) {
         try {
-            // CARA YANG LEBIH AMAN: Bikin object baru gabungan body + id
+
             const request: UpdateRestaurantRequest = {
                 ...req.body,
                 id: Number(req.params.restaurantId)
@@ -51,6 +51,16 @@ export class RestaurantController {
             await RestaurantService.delete(restaurantId);
             res.status(200).json({
                 data: "OK"
+            });
+        } catch (e) {
+            next(e);
+        }
+    }
+    static async getAll(req: Request, res: Response, next: NextFunction) {
+        try {
+            const response = await RestaurantService.getAll();
+            res.status(200).json({
+                data: response
             });
         } catch (e) {
             next(e);

@@ -1,4 +1,4 @@
-import { prismaClient } from "../utils/database-util"; 
+import { prismaClient } from "../utils/database-util";
 import { CreateCustomerRequest, CustomerResponse, toCustomerResponse, UpdateCustomerRequest } from "../models/customer-model";
 import { CustomerValidation } from "../validations/customer-validation";
 import { Validation } from "../validations/validation";
@@ -8,10 +8,7 @@ export class CustomerService {
 
     // 1. Create New Customer
     static async create(request: CreateCustomerRequest): Promise<CustomerResponse> {
-        // Cek dulu apakah data input sesuai aturan (validasi)
         const createRequest = Validation.validate(CustomerValidation.CREATE, request);
-
-        // Simpan ke database
         const customer = await prismaClient.customer.create({
             data: createRequest
         });
@@ -19,24 +16,21 @@ export class CustomerService {
         return toCustomerResponse(customer);
     }
 
-    // 2. Display Customer Info (Get by ID)
+    // 2. Get Customer by ID
     static async get(id: number): Promise<CustomerResponse> {
         const customer = await prismaClient.customer.findUnique({
             where: { id: id }
         });
-
         if (!customer) {
             throw new ResponseError(404, "Customer not found");
         }
-
         return toCustomerResponse(customer);
     }
 
     // 3. Update Customer Info
     static async update(request: UpdateCustomerRequest): Promise<CustomerResponse> {
         const updateRequest = Validation.validate(CustomerValidation.UPDATE, request);
-
-        // Cek apakah customer ada di database
+        // Cek customer ada di database
         const checkCustomer = await prismaClient.customer.count({
             where: { id: updateRequest.id }
         });
@@ -70,4 +64,13 @@ export class CustomerService {
 
         return toCustomerResponse(customer);
     }
+    static async getAll() {
+        const customers = await prismaClient.customer.findMany({
+            orderBy: {
+                id: 'asc'  // 'asc' artinya Ascending (1, 2, 3, 4...)
+            }
+        });
+        return customers;
+    }
+    
 }

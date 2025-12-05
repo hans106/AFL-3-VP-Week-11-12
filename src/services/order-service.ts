@@ -23,8 +23,6 @@ export class OrderService {
             where: { id: createRequest.restaurantId }
         });
         if (restaurantCount === 0) throw new ResponseError(404, "Restaurant not found");
-
-        // HITUNG ETA
         // Rumus: (Total Items * 10) + 10
         const calculatedEta = (createRequest.totalItems * 10) + 10;
 
@@ -44,7 +42,6 @@ export class OrderService {
     // 2. List All Orders (Untuk Testing)
     static async list(): Promise<Array<OrderResponse>> {
         const orders = await prismaClient.order.findMany();
-        // Disini kita kasih label ': Order' biar TypeScript tidak bingung
         return orders.map((order: Order) => toOrderResponse(order));
     }
     
