@@ -6,10 +6,8 @@ export class CustomerController {
 
 static async create(req: Request, res: Response, next: NextFunction) {
         try {
-            // --- PASANG CCTV DISINI ---
             console.log("CEK BODY:", req.body); 
             console.log("Tipe Data:", typeof req.body);
-            // --------------------------
             const request: CreateCustomerRequest = req.body as CreateCustomerRequest;
             const response = await CustomerService.create(request);
             res.status(200).json({
@@ -19,7 +17,6 @@ static async create(req: Request, res: Response, next: NextFunction) {
             next(e);
         }
     }
-
     static async get(req: Request, res: Response, next: NextFunction) {
         try {
             const customerId = Number(req.params.customerId);
@@ -36,7 +33,6 @@ static async create(req: Request, res: Response, next: NextFunction) {
         try {
             const request: UpdateCustomerRequest = req.body as UpdateCustomerRequest;
             request.id = Number(req.params.customerId); // Ambil ID dari URL
-
             const response = await CustomerService.update(request);
             res.status(200).json({
                 data: response
