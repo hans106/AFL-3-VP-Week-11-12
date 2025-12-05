@@ -6,9 +6,9 @@ import { Validation } from "../validations/validation";
 import { ResponseError } from "../error/response-error";
 
 export class OrderService {
-
     // 1. Create New Order (Hitung ETA)
     static async create(request: CreateOrderRequest): Promise<OrderResponse> {
+
         // Validasi input
         const createRequest = Validation.validate(OrderValidation.CREATE, request);
 
@@ -23,6 +23,7 @@ export class OrderService {
             where: { id: createRequest.restaurantId }
         });
         if (restaurantCount === 0) throw new ResponseError(404, "Restaurant not found");
+
         // Rumus: (Total Items * 10) + 10
         const calculatedEta = (createRequest.totalItems * 10) + 10;
 
@@ -35,11 +36,10 @@ export class OrderService {
                 eta: calculatedEta
             }
         });
-
         return toOrderResponse(order);
     }
-
-    // 2. List All Orders (Untuk Testing)
+    
+    // 2. List All Orders
     static async list(): Promise<Array<OrderResponse>> {
         const orders = await prismaClient.order.findMany();
         return orders.map((order: Order) => toOrderResponse(order));

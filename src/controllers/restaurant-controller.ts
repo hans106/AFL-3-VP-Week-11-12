@@ -30,7 +30,6 @@ export class RestaurantController {
 
     static async update(req: Request, res: Response, next: NextFunction) {
         try {
-
             const request: UpdateRestaurantRequest = {
                 ...req.body,
                 id: Number(req.params.restaurantId)

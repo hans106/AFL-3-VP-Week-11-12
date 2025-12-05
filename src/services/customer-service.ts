@@ -12,7 +12,6 @@ export class CustomerService {
         const customer = await prismaClient.customer.create({
             data: createRequest
         });
-
         return toCustomerResponse(customer);
     }
 
@@ -30,6 +29,7 @@ export class CustomerService {
     // 3. Update Customer Info
     static async update(request: UpdateCustomerRequest): Promise<CustomerResponse> {
         const updateRequest = Validation.validate(CustomerValidation.UPDATE, request);
+
         // Cek customer ada di database
         const checkCustomer = await prismaClient.customer.count({
             where: { id: updateRequest.id }
@@ -53,17 +53,17 @@ export class CustomerService {
         const checkCustomer = await prismaClient.customer.findUnique({
             where: { id: id }
         });
-
         if (!checkCustomer) {
             throw new ResponseError(404, "Customer not found");
         }
-
         const customer = await prismaClient.customer.delete({
             where: { id: id }
         });
 
         return toCustomerResponse(customer);
     }
+    
+    // 5. Get All Customers
     static async getAll() {
         const customers = await prismaClient.customer.findMany({
             orderBy: {
